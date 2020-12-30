@@ -5,6 +5,8 @@
 This repository provides Docker configuration to run [ROS](https://ros.org)-based [Gazebo](http://gazebosim.org/) simulation of Panda robot inside [Docker](https://www.docker.com/) containers:
     
 <!-- 
+Inspired by: https://github.com/gramaziokohler/ros_docker
+
 ## Base ROS image `ìjs:kinetic-devel`
 
 [![](https://img.shields.io/docker/v/gramaziokohler/ros-base?sort=date)](https://hub.docker.com/r/gramaziokohler/ros-base)
@@ -19,7 +21,7 @@ Contains ROS and tools to use it over websockers with `rosbridge-suite`.-->
   - This image inherits from the image with the tag [`kinetic`](https://hub.docker.com/_/ros) in the official ROS Dockerhub repository. It is  expanded with a few additional tools that we found useful and the core robot messages package [`robot_module_msgs`](https://github.com/ReconCycle/robot_module_msgs).
 - [ijs:kinetic-gazebo](/kinetic-gazebo)
   - Extends `ijs:kinetic-devel` with Gazebo simulator and Gazebo ROS bindings.
-- [panda-simulator]
+- [panda-simulator](/panda-simulator)
   - Contains Panda simulation in Gazebo based on [`panda_simulator` stack by justagist](https://github.com/justagist/panda_simulator)
 - [ijs:gzweb](/gzweb)
   - Contains base gzweb client
@@ -51,6 +53,8 @@ Panda simulation runs headless in a container and is rendered in browser using [
     $ cd examples/panda-simulator-gzweb
     $ docker-compose up
 
+Open [localhost:80](http://localhost:80) in your favourite browser.
+
 <!-- TODO: nvidia-docker, xhost -->
 
 ### Move panda using action server (experimental)
@@ -59,8 +63,8 @@ Panda simulation runs headless in a container and is rendered in browser using [
  2. Determine the name of the ROS network using `docker network ls`. If you run `gzweb` it will probbably be `panda-simulator-gzweb_ros`, which we asume in next steps.
  3. Start action server using:
 
-    $ docker run -it --network panda-simulator-gzweb_ros -e ROS_MASTER_URI=http://rosmaster:11311 ijs:sim_controllers_interface rosrun sim_controllers_interface joint_min_jerk_test_client.py
+    `docker run -it --network panda-simulator-gzweb_ros -e ROS_MASTER_URI=http://rosmaster:11311 ijs:sim_controllers_interface rosrun sim_controllers_interface joint_min_jerk_action_server.py`
     
  4. Send test goal using: 
     
-    $ docker run -it --network panda-simulator-action-servers_ros -e ROS_MASTER_URI=http://rosmaster:11311 ijs:sim_controllers_interface rosrun sim_controllers_interface joint_min_jerk_test_client.py
+    `docker run -it --network panda-simulator-gzweb_ros -e ROS_MASTER_URI=http://rosmaster:11311 ijs:sim_controllers_interface rosrun sim_controllers_interface joint_min_jerk_test_client.py`
