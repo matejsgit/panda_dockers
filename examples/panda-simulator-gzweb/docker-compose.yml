@@ -1,0 +1,44 @@
+version: '3'
+
+networks:
+  ros:
+    driver: bridge
+
+services:
+  rosmaster:
+    image: ros:kinetic
+    command: stdbuf -o L roscore
+    networks:
+      - ros
+    environment:
+      - "ROS_HOSTNAME=rosmaster"
+  simulation:
+    #image: reconcycle/docker_examples:ros1-simulation
+    image: ijs:panda-simulator
+    depends_on:
+      - rosmaster
+    command: stdbuf -o L roslaunch panda_gazebo panda_world.launch gui:=false
+    environment:
+      - "ROS_MASTER_URI=http://rosmaster:11311"
+      - "ROS_HOSTNAME=simulation"
+    networks:
+      - ros
+    restart: always   
+  gzweb:
+    image: ijs:panda-gzweb
+    depends_on:
+      - rosmaster
+    #command: npm start --prefix ~/gzweb
+    environment:
+      - "ROS_MASTER_URI=http://rosmaster:11311"
+      - "ROS_HOSTNAME=gzweb"
+    networks:
+      - ros
+    ports:
+      - 80:8080
+      - 7681:7681
+    links:
+        - simulation
+    environment:
+        - "GAZEBO_MASTER_URI=http://simulation:11345"
+    restart: always
