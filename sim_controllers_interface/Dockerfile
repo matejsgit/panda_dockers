@@ -12,6 +12,7 @@ FROM ijs:kinetic-devel as intermediate
 RUN sudo apt install -yq openssh-client
 WORKDIR /tmp
 COPY github_key .
+RUN chmod 600 github_key
 RUN eval $(ssh-agent) && \
     ssh-add github_key && \
     ssh-keyscan -t rsa -H github.com >> /etc/ssh/ssh_known_hosts && \
