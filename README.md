@@ -32,9 +32,11 @@ Contains ROS and tools to use it over websockers with `rosbridge-suite`.-->
   
 ## Examples
 
-To run any of the images, you first have to build the images. 
+To run any of the images, you first have to build the images. To do navigate terminal to the cloned repository and execute folllowing script: 
 
     $ ./build.sh
+
+If you work on Windows with powershell use `build.ps1` script instead.
     
 ### Gazebo in X11 NoVNC display container
 
