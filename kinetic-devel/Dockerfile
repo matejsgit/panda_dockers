@@ -6,10 +6,9 @@ ENV HOME=/root \
     LANGUAGE=en_US.UTF-8 \
     LC_ALL=C.UTF-8
 
-# Install pip & cli tools
+# Install cli tools
 RUN set -ex; \
     apt update && apt install -y \
-    python-pip \
     screen \
     vim \
     nano \
@@ -18,9 +17,9 @@ RUN set -ex; \
     git \
     wget
 
-RUN pip install --upgrade pip
-
-RUN pip install catkin_tools
+# Install pip for Python2
+RUN wget https://bootstrap.pypa.io/2.7/get-pip.py
+RUN python get-pip.pyRUN pip install catkin_tools
 
 # Initialize the catkin workspace
 WORKDIR /ros_ws/src
