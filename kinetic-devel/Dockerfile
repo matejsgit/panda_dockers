@@ -19,7 +19,8 @@ RUN set -ex; \
 
 # Install pip for Python2
 RUN wget https://bootstrap.pypa.io/2.7/get-pip.py
-RUN python get-pip.pyRUN pip install catkin_tools
+RUN python get-pip.py
+RUN pip install catkin_tools
 
 # Initialize the catkin workspace
 WORKDIR /ros_ws/src
